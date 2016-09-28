@@ -1,0 +1,14 @@
+server:
+  port: 5000
+  context-path: /orders
+
+mongo:
+  # Server endpoint IP or DNS name. If it's a cluster, set the addresses separated by ","
+  dbname: orders
+  endpoints: localhost
+
+spring:
+  profiles:
+    active: dev
+  jackson:
+    serialization-inclusion: non_null

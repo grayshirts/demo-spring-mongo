@@ -58,8 +58,47 @@ Access to the application
 You can get for example all the orders from the ``/orders`` *REST* service within the
 console with:
 
-    curl http://localhost:5000/orders/
+    $ curl http://localhost:5000/orders/
 
+### Insert a product
+
+    $ curl -X POST http://localhost:5000/orders/products \
+         -d '{"sku":"IPH7","description":"iPhone 7","instock":10}' -H Content-Type:application/json
+
+### Insert an order
+
+    $ curl -X POST http://localhost:5000/orders/ \
+         -d '{"item":"IPH7","price":18200.43,"quantity":1}' -H Content-Type:application/json
+
+### Get all orders with the product information using the `$lookup` operator (Left Join)
+
+    $ curl http://localhost:5000/orders/report
+
+This execute with Morphia:
+
+```java
+datastore.createAggregation(Order.class)
+         .lookup("products", "item", "_id", "products")
+         .out(OrdersReport.class)
+```
+
+It'is equivalent to do from a MongoDB client:
+
+```javascript
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: "products",
+      localField: "item",
+      foreignField: "_id",
+      as: "products"
+    }
+  }
+  ,{
+    $out: "orders_report"
+  }
+]);
+```
 
 --
 (2016) Grayshirts

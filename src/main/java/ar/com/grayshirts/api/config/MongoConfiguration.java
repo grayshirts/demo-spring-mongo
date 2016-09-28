@@ -34,7 +34,8 @@ public class MongoConfiguration {
     public Datastore mongoDbDataStore() throws UnknownHostException {
         log.info("Connecting with MongoDB. dbname=" + mongoDbName + ", addresses="  + mongoEndpoints);
         MongoClient client = new MongoClient(stream(mongoEndpoints.split(",")).map(ServerAddress::new).collect(toList()));
-        Datastore ds = new Morphia().createDatastore(client, mongoDbName);
+        Datastore ds = new Morphia().mapPackage("ar.com.grayshirts.api.model").createDatastore(client, mongoDbName);
+        ds.ensureIndexes();
         return ds;
     }
 }

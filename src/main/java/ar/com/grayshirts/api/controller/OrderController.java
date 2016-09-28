@@ -46,6 +46,7 @@ public class OrderController {
         o.setItem(productDao.getBySku(order.item));
         o.setPrice(order.price);
         o.setQuantity(order.quantity);
+        orderDao.save(o);
         log.info("New order with id {}", o.getIdAsStr());
         return o;
     }
